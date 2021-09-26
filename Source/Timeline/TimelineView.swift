@@ -229,7 +229,9 @@ public final class TimelineView: UIView {
   public func updateStyle(_ newStyle: TimelineStyle) {
     style = newStyle
     allDayView.updateStyle(style.allDayStyle)
+
     nowLine.updateStyle(style.timeIndicator)
+    nowLine.isHidden = newStyle.isNowLineHidden
     
     switch style.dateStyle {
       case .twelveHour:
@@ -281,7 +283,6 @@ public final class TimelineView: UIView {
                       NSAttributedString.Key.font: style.font] as [NSAttributedString.Key : Any]
 
     let scale = UIScreen.main.scale
-    let hourLineHeight = 1 / UIScreen.main.scale
 
     let center: CGFloat
     if Int(scale) % 2 == 0 {
@@ -296,29 +297,41 @@ public final class TimelineView: UIView {
         let rightToLeft = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute) == .rightToLeft
         
         let hourFloat = CGFloat(hour)
+
         let context = UIGraphicsGetCurrentContext()
+
         context!.interpolationQuality = .none
         context?.saveGState()
-        context?.setStrokeColor(style.separatorColor.cgColor)
-        context?.setLineWidth(hourLineHeight)
+        context?.setStrokeColor(style.separatorStyle.color.cgColor)
+        context?.setLineWidth(style.separatorStyle.lineLength)
+
         let xStart: CGFloat = {
             if rightToLeft {
-                return bounds.width - 53
+                return bounds.width - style.leadingInset
             } else {
-                return 53
+              return style.leadingInset + style.separatorStyle.leadingInset
             }
         }()
+
         let xEnd: CGFloat = {
             if rightToLeft {
-                return 0
+                return style.separatorStyle.trailingInset
             } else {
-                return bounds.width
+                return bounds.width - style.separatorStyle.trailingInset
             }
         }()
+
         let y = style.verticalInset + hourFloat * style.verticalDiff + offset
+
         context?.beginPath()
         context?.move(to: CGPoint(x: xStart, y: y))
         context?.addLine(to: CGPoint(x: xEnd, y: y))
+
+        if style.separatorStyle.lineStyle == .dashed {
+          context?.setLineDash(phase: .zero, lengths: [2, 2])
+          context?.setLineCap(.butt)
+        }
+
         context?.strokePath()
         context?.restoreGState()
     
@@ -328,7 +341,7 @@ public final class TimelineView: UIView {
         let timeRect: CGRect = {
             var x: CGFloat
             if rightToLeft {
-                x = bounds.width - 53
+                x = bounds.width - style.leadingInset
             } else {
                 x = 2
             }

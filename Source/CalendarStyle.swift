@@ -60,8 +60,8 @@ public struct SwipeLabelStyle {
 public struct TimelineStyle {
   public var allDayStyle = AllDayViewStyle()
   public var timeIndicator = CurrentTimeIndicatorStyle()
+  public var separatorStyle = SeparatorStyle()
   public var timeColor = SystemColors.secondaryLabel
-  public var separatorColor = SystemColors.systemSeparator
   public var backgroundColor = SystemColors.systemBackground
   public var font = UIFont.boldSystemFont(ofSize: 11)
   public var dateStyle : DateStyle = .system
@@ -72,6 +72,7 @@ public struct TimelineStyle {
   public var verticalInset: CGFloat = 10
   public var leadingInset: CGFloat = 53
   public var eventGap: CGFloat = 0
+  public var isNowLineHidden = false
   public init() {}
 }
 
@@ -86,5 +87,19 @@ public struct AllDayViewStyle {
   public var backgroundColor: UIColor = SystemColors.systemGray4
   public var allDayFont = UIFont.systemFont(ofSize: 12.0)
   public var allDayColor: UIColor = SystemColors.label
+  public init() {}
+}
+
+public enum LineStyle {
+    case solid
+    case dashed
+}
+
+public struct SeparatorStyle {
+  public var color = SystemColors.systemSeparator
+  public var leadingInset: CGFloat = 0
+  public var trailingInset: CGFloat = 0
+  public var lineStyle: LineStyle = .solid
+  public var lineLength: CGFloat = 1 / UIScreen.main.scale
   public init() {}
 }
