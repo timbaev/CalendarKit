@@ -1,13 +1,13 @@
 import UIKit
 
 public protocol TimelineViewDelegate: AnyObject {
-  func timelineView(_ timelineView: TimelineView, didTapAt date: Date)
-  func timelineView(_ timelineView: TimelineView, didLongPressAt date: Date)
-  func timelineView(_ timelineView: TimelineView, didTap event: EventView)
-  func timelineView(_ timelineView: TimelineView, didLongPress event: EventView)
+  func timelineView<EventView: EventDescriptorHolder>(_ timelineView: TimelineView<EventView>, didTapAt date: Date)
+  func timelineView<EventView: EventDescriptorHolder>(_ timelineView: TimelineView<EventView>, didLongPressAt date: Date)
+  func timelineView<EventView: EventDescriptorHolder>(_ timelineView: TimelineView<EventView>, didTap event: EventView)
+  func timelineView<EventView: EventDescriptorHolder>(_ timelineView: TimelineView<EventView>, didLongPress event: EventView)
 }
 
-public final class TimelineView: UIView {
+public final class TimelineView<EventView: EventDescriptorHolder>: UIView {
   public weak var delegate: TimelineViewDelegate?
 
   public var date = Date() {
@@ -64,8 +64,8 @@ public final class TimelineView: UIView {
   private lazy var nowLine: CurrentTimeIndicator = CurrentTimeIndicator()
   
   private var allDayViewTopConstraint: NSLayoutConstraint?
-  private lazy var allDayView: AllDayView = {
-    let allDayView = AllDayView(frame: CGRect.zero)
+  private lazy var allDayView: AllDayView<EventView> = {
+    let allDayView = AllDayView<EventView>(frame: CGRect.zero)
     
     allDayView.translatesAutoresizingMaskIntoConstraints = false
     addSubview(allDayView)

@@ -76,10 +76,10 @@ open class DayViewController: UIViewController, EventDataSource, DayViewDelegate
 
   // MARK: - DayViewDelegate
 
-  open func dayViewDidSelectEventView(_ eventView: EventView) {
+  open func dayViewDidSelectEventView<EventView: EventDescriptorHolder>(_ eventView: EventView) {
   }
 
-  open func dayViewDidLongPressEventView(_ eventView: EventView) {
+  open func dayViewDidLongPressEventView<EventView: EventDescriptorHolder>(_ eventView: EventView) {
   }
 
   open func dayView(dayView: DayView, didTapTimelineAt date: Date) {

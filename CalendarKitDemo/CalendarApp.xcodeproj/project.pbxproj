@@ -13,6 +13,7 @@
 		7924836B23CB7BFE003E3D27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924836523CB7BFE003E3D27 /* AppDelegate.swift */; };
 		7924836C23CB7BFE003E3D27 /* CustomCalendarExampleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924836623CB7BFE003E3D27 /* CustomCalendarExampleController.swift */; };
 		79EBF686266D4D0900DA9ACA /* CalendarKit in Frameworks */ = {isa = PBXBuildFile; productRef = 79EBF685266D4D0900DA9ACA /* CalendarKit */; };
+		8E479AFC27097AAA00A9A617 /* SubjectEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E479AFB27097AAA00A9A617 /* SubjectEventView.swift */; };
 		8E65F15C270072B300BA616C /* CustomTimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E65F15B270072B300BA616C /* CustomTimelineViewController.swift */; };
 		C522CA1D2B363E7413F0879E /* Pods_CalendarApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A223D8E39EB8C7A25F4E823A /* Pods_CalendarApp.framework */; };
 /* End PBXBuildFile section */
@@ -26,6 +27,7 @@
 		7924836423CB7BFE003E3D27 /* DatePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerController.swift; sourceTree = "<group>"; };
 		7924836523CB7BFE003E3D27 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7924836623CB7BFE003E3D27 /* CustomCalendarExampleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = CustomCalendarExampleController.swift; sourceTree = "<group>"; tabWidth = 2; };
+		8E479AFB27097AAA00A9A617 /* SubjectEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectEventView.swift; sourceTree = "<group>"; };
 		8E65F15B270072B300BA616C /* CustomTimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTimelineViewController.swift; sourceTree = "<group>"; };
 		A223D8E39EB8C7A25F4E823A /* Pods_CalendarApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CalendarApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F20CBDF924F3AC0AD4A81CE1 /* Pods-CalendarApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CalendarApp.debug.xcconfig"; path = "Target Support Files/Pods-CalendarApp/Pods-CalendarApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 		7924834223CB7B57003E3D27 /* CalendarApp */ = {
 			isa = PBXGroup;
 			children = (
+				8E479AFA27097A9800A9A617 /* SubjectEvent */,
 				7924836523CB7BFE003E3D27 /* AppDelegate.swift */,
 				7924834C23CB7B58003E3D27 /* Assets.xcassets */,
 				7924836623CB7BFE003E3D27 /* CustomCalendarExampleController.swift */,
@@ -83,6 +86,14 @@
 				7924834E23CB7B58003E3D27 /* LaunchScreen.storyboard */,
 			);
 			path = CalendarApp;
+			sourceTree = "<group>";
+		};
+		8E479AFA27097A9800A9A617 /* SubjectEvent */ = {
+			isa = PBXGroup;
+			children = (
+				8E479AFB27097AAA00A9A617 /* SubjectEventView.swift */,
+			);
+			path = SubjectEvent;
 			sourceTree = "<group>";
 		};
 		D2B9A4777F5DB09BCFA26C1E /* Frameworks */ = {
@@ -216,6 +227,7 @@
 			files = (
 				7924836B23CB7BFE003E3D27 /* AppDelegate.swift in Sources */,
 				7924836C23CB7BFE003E3D27 /* CustomCalendarExampleController.swift in Sources */,
+				8E479AFC27097AAA00A9A617 /* SubjectEventView.swift in Sources */,
 				8E65F15C270072B300BA616C /* CustomTimelineViewController.swift in Sources */,
 				7924836A23CB7BFE003E3D27 /* DatePickerController.swift in Sources */,
 			);

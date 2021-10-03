@@ -1,11 +1,3 @@
-//
-//  CustomTimelineViewController.swift
-//  CalendarApp
-//
-//  Created by Timur Shafigullin on 26/09/2021.
-//  Copyright © 2021 Richard Topchii. All rights reserved.
-//
-
 import UIKit
 import CallKit
 import CalendarKit
@@ -14,8 +6,8 @@ final class CustomTimelineViewController: UIViewController {
 
     public weak var dataSource: EventDataSource?
 
-    private func setupTimelineController() -> TimelineContainerController {
-        let viewController = TimelineContainerController()
+    private func setupTimelineController() -> TimelineContainerController<EventView> {
+        let viewController = TimelineContainerController<EventView>()
 
         addChild(viewController)
         view.addSubview(viewController.view)
@@ -78,19 +70,31 @@ final class CustomTimelineViewController: UIViewController {
 
 extension CustomTimelineViewController: TimelineViewDelegate {
 
-    func timelineView(_ timelineView: TimelineView, didTapAt date: Date) {
+    func timelineView<EventView: EventDescriptorHolder>(
+        _ timelineView: TimelineView<EventView>,
+        didTapAt date: Date
+    ) {
         print("timelineViewDidTapAt(date: \(date))")
     }
 
-    func timelineView(_ timelineView: TimelineView, didLongPressAt date: Date) {
+    func timelineView<EventView: EventDescriptorHolder>(
+        _ timelineView: TimelineView<EventView>,
+        didLongPressAt date: Date
+    ) {
         print("timelineViewDidLongPressAt(date: \(date))")
     }
 
-    func timelineView(_ timelineView: TimelineView, didTap event: EventView) {
+    func timelineView<EventView: EventDescriptorHolder>(
+        _ timelineView: TimelineView<EventView>,
+        didTap event: EventView
+    ) {
         print("timelineViewDidTap(event: \(String(describing: event.descriptor)))")
     }
 
-    func timelineView(_ timelineView: TimelineView, didLongPress event: EventView) {
+    func timelineView<EventView: EventDescriptorHolder>(
+        _ timelineView: TimelineView<EventView>,
+        didLongPress event: EventView
+    ) {
         print("timelineViewDidLongPress(event: \(String(describing: event.descriptor)))")
     }
 }

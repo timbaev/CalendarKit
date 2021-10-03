@@ -113,15 +113,15 @@ class CustomCalendarExampleController: DayViewController {
   // MARK: DayViewDelegate
   
   private var createdEvent: EventDescriptor?
-  
-  override func dayViewDidSelectEventView(_ eventView: EventView) {
+
+  override func dayViewDidSelectEventView<EventView: EventDescriptorHolder>(_ eventView: EventView) {
     guard let descriptor = eventView.descriptor as? Event else {
       return
     }
     print("Event has been selected: \(descriptor) \(String(describing: descriptor.userInfo))")
   }
-  
-  override func dayViewDidLongPressEventView(_ eventView: EventView) {
+
+  override func dayViewDidLongPressEventView<EventView: EventDescriptorHolder>(_ eventView: EventView) {
     guard let descriptor = eventView.descriptor as? Event else {
       return
     }

@@ -1,8 +1,8 @@
 import UIKit
 
 public protocol TimelinePagerViewDelegate: AnyObject {
-  func timelinePagerDidSelectEventView(_ eventView: EventView)
-  func timelinePagerDidLongPressEventView(_ eventView: EventView)
+  func timelinePagerDidSelectEventView<EventView: EventDescriptorHolder>(_ eventView: EventView)
+  func timelinePagerDidLongPressEventView<EventView: EventDescriptorHolder>(_ eventView: EventView)
   func timelinePager(timelinePager: TimelinePagerView, didTapTimelineAt date: Date)
   func timelinePagerDidBeginDragging(timelinePager: TimelinePagerView)
   func timelinePagerDidTransitionCancel(timelinePager: TimelinePagerView)
@@ -16,6 +16,8 @@ public protocol TimelinePagerViewDelegate: AnyObject {
 
 public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScrollViewDelegate, DayViewStateUpdating, UIPageViewControllerDataSource, UIPageViewControllerDelegate, TimelineViewDelegate {
 
+  public typealias TimelineController = TimelineContainerController<EventView>
+
   public weak var dataSource: EventDataSource?
   public weak var delegate: TimelinePagerViewDelegate?
 
@@ -27,8 +29,8 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
     return offset ?? CGPoint()
   }
   
-  private var currentTimeline: TimelineContainerController? {
-    return pagingViewController.viewControllers?.first as? TimelineContainerController
+  private var currentTimeline: TimelineController? {
+    return pagingViewController.viewControllers?.first as? TimelineController
   }
 
   public var autoScrollToFirstEvent = false
@@ -98,14 +100,14 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
   public func updateStyle(_ newStyle: TimelineStyle) {
     style = newStyle
     pagingViewController.viewControllers?.forEach({ (timelineContainer) in
-      if let controller = timelineContainer as? TimelineContainerController {
+      if let controller = timelineContainer as? TimelineController {
         self.updateStyleOfTimelineContainer(controller: controller)
       }
     })
     pagingViewController.view.backgroundColor = style.backgroundColor
   }
 
-  private func updateStyleOfTimelineContainer(controller: TimelineContainerController) {
+  private func updateStyleOfTimelineContainer(controller: TimelineController) {
     let container = controller.container
     let timeline = controller.timeline
     timeline.updateStyle(style)
@@ -114,7 +116,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
 
   public func timelinePanGestureRequire(toFail gesture: UIGestureRecognizer) {
     for controller in pagingViewController.viewControllers ?? [] {
-      if let controller = controller as? TimelineContainerController {
+      if let controller = controller as? TimelineController {
         let container = controller.container
         container.panGestureRecognizer.require(toFail: gesture)
       }
@@ -128,8 +130,8 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
     }
   }
 
-  private func configureTimelineController(date: Date) -> TimelineContainerController {
-    let controller = TimelineContainerController()
+  private func configureTimelineController(date: Date) -> TimelineController {
+    let controller = TimelineController()
     updateStyleOfTimelineContainer(controller: controller)
     let timeline = controller.timeline
     timeline.longPressGestureRecognizer.addTarget(self, action: #selector(timelineDidLongPress(_:)))
@@ -159,7 +161,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
 
   public func reloadData() {
     pagingViewController.children.forEach({ (controller) in
-      if let controller = controller as? TimelineContainerController {
+      if let controller = controller as? TimelineController {
         self.updateTimeline(controller.timeline)
       }
     })
@@ -170,7 +172,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
     pagingViewController.view.frame = bounds
   }
 
-  private func updateTimeline(_ timeline: TimelineView) {
+  private func updateTimeline(_ timeline: TimelineView<EventView>) {
     guard let dataSource = dataSource else {return}
     let date = timeline.date.dateOnly(calendar: calendar)
     let events = dataSource.eventsForDate(date)
@@ -384,7 +386,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
     }
   }
   
-  private func yToDate(y: CGFloat, timeline: TimelineView) -> Date {
+  private func yToDate(y: CGFloat, timeline: TimelineView<EventView>) -> Date {
     let point = CGPoint(x: 0, y: y)
     let converted = convert(point, to: timeline).y
     let date = timeline.yToDate(converted)
@@ -452,19 +454,19 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
   // MARK: UIPageViewControllerDataSource
 
   public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-    guard let containerController = viewController as? TimelineContainerController  else {return nil}
+    guard let containerController = viewController as? TimelineController  else {return nil}
     let previousDate = calendar.date(byAdding: .day, value: -1, to: containerController.timeline.date)!
     let vc = configureTimelineController(date: previousDate)
-    let offset = (pageViewController.viewControllers?.first as? TimelineContainerController)?.container.contentOffset
+    let offset = (pageViewController.viewControllers?.first as? TimelineController)?.container.contentOffset
     vc.pendingContentOffset = offset
     return vc
   }
 
   public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-    guard let containerController = viewController as? TimelineContainerController  else {return nil}
+    guard let containerController = viewController as? TimelineController else {return nil}
     let nextDate = calendar.date(byAdding: .day, value: 1, to: containerController.timeline.date)!
     let vc = configureTimelineController(date: nextDate)
-    let offset = (pageViewController.viewControllers?.first as? TimelineContainerController)?.container.contentOffset
+    let offset = (pageViewController.viewControllers?.first as? TimelineController)?.container.contentOffset
     vc.pendingContentOffset = offset
     return vc
   }
@@ -476,7 +478,7 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
       delegate?.timelinePagerDidTransitionCancel(timelinePager: self)
       return
     }
-    if let timelineContainerController = pageViewController.viewControllers?.first as? TimelineContainerController {
+    if let timelineContainerController = pageViewController.viewControllers?.first as? TimelineController {
       let selectedDate = timelineContainerController.timeline.date
       delegate?.timelinePager(timelinePager: self, willMoveTo: selectedDate)
       state?.client(client: self, didMoveTo: selectedDate)
@@ -490,20 +492,32 @@ public final class TimelinePagerView: UIView, UIGestureRecognizerDelegate, UIScr
   }
 
   // MARK: TimelineViewDelegate
-  
-  public func timelineView(_ timelineView: TimelineView, didTapAt date: Date) {
+
+  public func timelineView<EventView: EventDescriptorHolder>(
+      _ timelineView: TimelineView<EventView>,
+      didTapAt date: Date
+  ) {
     delegate?.timelinePager(timelinePager: self, didTapTimelineAt: date)
   }
-  
-  public func timelineView(_ timelineView: TimelineView, didLongPressAt date: Date) {
+
+  public func timelineView<EventView: EventDescriptorHolder>(
+      _ timelineView: TimelineView<EventView>,
+      didLongPressAt date: Date
+  ) {
     delegate?.timelinePager(timelinePager: self, didLongPressTimelineAt: date)
   }
-  
-  public func timelineView(_ timelineView: TimelineView, didTap event: EventView) {
+
+  public func timelineView<EventView: EventDescriptorHolder>(
+      _ timelineView: TimelineView<EventView>,
+      didTap event: EventView
+  ) {
     delegate?.timelinePagerDidSelectEventView(event)
   }
-  
-  public func timelineView(_ timelineView: TimelineView, didLongPress event: EventView) {
+
+  public func timelineView<EventView: EventDescriptorHolder>(
+      _ timelineView: TimelineView<EventView>,
+      didLongPress event: EventView
+  ) {
     delegate?.timelinePagerDidLongPressEventView(event)
   }
 }

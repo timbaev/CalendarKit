@@ -1,7 +1,7 @@
 
 import UIKit
 
-public final class AllDayView: UIView {
+public final class AllDayView<EventView: EventDescriptorHolder>: UIView {
   private var style = AllDayViewStyle()
   
   private let allDayEventHeight: CGFloat = 24.0

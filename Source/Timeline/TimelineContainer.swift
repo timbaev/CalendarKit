@@ -1,9 +1,9 @@
 import UIKit
 
-public final class TimelineContainer: UIScrollView {
-  public let timeline: TimelineView
+public final class TimelineContainer<EventView: EventDescriptorHolder>: UIScrollView {
+  public let timeline: TimelineView<EventView>
   
-  public init(_ timeline: TimelineView) {
+  public init(_ timeline: TimelineView<EventView>) {
     self.timeline = timeline
     super.init(frame: .zero)
   }
