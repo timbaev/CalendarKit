@@ -6,8 +6,8 @@ final class CustomTimelineViewController: UIViewController {
 
     public weak var dataSource: EventDataSource?
 
-    private func setupTimelineController() -> TimelineContainerController<EventView> {
-        let viewController = TimelineContainerController<EventView>()
+    private func setupTimelineController() -> TimelineContainerController<SubjectEventView> {
+        let viewController = TimelineContainerController<SubjectEventView>()
 
         addChild(viewController)
         view.addSubview(viewController.view)
@@ -111,11 +111,11 @@ extension CustomTimelineViewController: EventDataSource {
     // MARK: - Instance Methods
 
     func eventsForDate(_ date: Date) -> [EventDescriptor] {
-        let event = Event()
-
-        event.startDate = date.addingTimeInterval(60 * 60 * 16)
-        event.endDate = date.addingTimeInterval(60 * 60 * 17)
-        event.text = "Английский язык - 11 класс"
+        let event = SubjectEventDescriptor(
+            startDate: date.addingTimeInterval(60 * 60 * 16),
+            subjectName: "Английский язык - 11 класс",
+            subjectColor: .red
+        )
 
         return [event]
     }
