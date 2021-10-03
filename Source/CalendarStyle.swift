@@ -61,6 +61,7 @@ public struct TimelineStyle {
   public var allDayStyle = AllDayViewStyle()
   public var timeIndicator = CurrentTimeIndicatorStyle()
   public var separatorStyle = SeparatorStyle()
+  public var eventStyle = EventStyle()
   public var timeColor = SystemColors.secondaryLabel
   public var backgroundColor = SystemColors.systemBackground
   public var font = UIFont.boldSystemFont(ofSize: 11)
@@ -71,7 +72,6 @@ public struct TimelineStyle {
   public var verticalDiff: CGFloat = 50
   public var verticalInset: CGFloat = 10
   public var leadingInset: CGFloat = 53
-  public var eventGap: CGFloat = 0
   public var isNowLineHidden = false
   public init() {}
 }
@@ -101,5 +101,12 @@ public struct SeparatorStyle {
   public var trailingInset: CGFloat = 0
   public var lineStyle: LineStyle = .solid
   public var lineLength: CGFloat = 1 / UIScreen.main.scale
+  public init() {}
+}
+
+public struct EventStyle {
+  public var leadingInset: CGFloat = 0
+  public var trailingInset: CGFloat = 0
+  public var gap: CGFloat = 0
   public init() {}
 }

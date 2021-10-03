@@ -34,6 +34,7 @@ final class CustomTimelineViewController: UIViewController {
 
         var style = TimelineStyle()
         var separatorStyle = SeparatorStyle()
+        var eventStyle = EventStyle()
 
         separatorStyle.color = UIColor(red: 0.88, green: 0.88, blue: 0.88, alpha: 1.0)
         separatorStyle.leadingInset = 20.0
@@ -41,7 +42,11 @@ final class CustomTimelineViewController: UIViewController {
         separatorStyle.lineStyle = .dashed
         separatorStyle.lineLength = 1.0
 
+        eventStyle.leadingInset = 20.0
+        eventStyle.trailingInset = 8.0
+
         style.separatorStyle = separatorStyle
+        style.eventStyle = eventStyle
         style.timeColor = UIColor(red: 0.1, green: 0.0, blue: 0.2, alpha: 1.0)
         style.backgroundColor = UIColor(red: 0.98, green: 0.98, blue: 0.98, alpha: 1.0)
         style.font = .systemFont(ofSize: 12.0, weight: .regular)

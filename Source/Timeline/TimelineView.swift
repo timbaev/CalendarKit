@@ -419,8 +419,8 @@ public final class TimelineView<EventView: EventDescriptorHolder>: UIView {
         
       eventView.frame = CGRect(x: x,
                                y: attributes.frame.minY,
-                               width: attributes.frame.width - style.eventGap,
-                               height: attributes.frame.height - style.eventGap)
+                               width: attributes.frame.width - style.eventStyle.gap,
+                               height: attributes.frame.height - style.eventStyle.gap)
       eventView.updateWithDescriptor(event: descriptor)
     }
   }
@@ -480,8 +480,8 @@ public final class TimelineView<EventView: EventDescriptorHolder>: UIView {
         }
       } else {
         let lastEvent = overlappingEvents.last!
-        if (longestEvent.descriptor.datePeriod.overlaps(event.descriptor.datePeriod) && (longestEvent.descriptor.endDate != event.descriptor.startDate || style.eventGap <= 0.0)) ||
-          (lastEvent.descriptor.datePeriod.overlaps(event.descriptor.datePeriod) && (lastEvent.descriptor.endDate != event.descriptor.startDate || style.eventGap <= 0.0)) {
+        if (longestEvent.descriptor.datePeriod.overlaps(event.descriptor.datePeriod) && (longestEvent.descriptor.endDate != event.descriptor.startDate || style.eventStyle.gap <= 0.0)) ||
+          (lastEvent.descriptor.datePeriod.overlaps(event.descriptor.datePeriod) && (lastEvent.descriptor.endDate != event.descriptor.startDate || style.eventStyle.gap <= 0.0)) {
           overlappingEvents.append(event)
           continue
         }
@@ -499,9 +499,16 @@ public final class TimelineView<EventView: EventDescriptorHolder>: UIView {
         let startY = dateToY(event.descriptor.datePeriod.lowerBound)
         let endY = dateToY(event.descriptor.datePeriod.upperBound)
         let floatIndex = CGFloat(index)
-        let x = style.leadingInset + floatIndex / totalCount * calendarWidth
-        let equalWidth = calendarWidth / totalCount
-        event.frame = CGRect(x: x, y: startY, width: equalWidth, height: endY - startY)
+        let eventWidth = calendarWidth - style.eventStyle.leadingInset - style.eventStyle.trailingInset
+        let x = style.leadingInset + floatIndex / totalCount * eventWidth
+        let equalWidth = eventWidth / totalCount
+
+        event.frame = CGRect(
+          x: (index == .zero) ? (x + style.eventStyle.leadingInset) : x,
+          y: startY,
+          width: equalWidth,
+          height: endY - startY
+        )
       }
     }
   }
