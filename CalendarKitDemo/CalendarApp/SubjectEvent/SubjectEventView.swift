@@ -17,7 +17,6 @@ final class SubjectEventView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 5.0
         layer.masksToBounds = true
         backgroundColor = .white
@@ -40,7 +39,7 @@ final class SubjectEventView: UIView {
         NSLayoutConstraint.activate([
             colorView.topAnchor.constraint(equalTo: topAnchor),
             colorView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            colorView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            colorView.bottomAnchor.constraint(equalTo: bottomAnchor).withPrority(UILayoutPriority(999.0)),
             colorView.widthAnchor.constraint(equalToConstant: 5.0)
         ])
     }
@@ -53,8 +52,8 @@ final class SubjectEventView: UIView {
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8.0),
             nameLabel.leadingAnchor.constraint(equalTo: colorView.trailingAnchor, constant: 20.0),
-            nameLabel.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -8.0),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20.0)
+            nameLabel.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -8.0).withPrority(UILayoutPriority(999.0)),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20.0).withPrority(UILayoutPriority(999.0))
         ])
     }
 }
@@ -70,5 +69,18 @@ extension SubjectEventView: EventDescriptorHolder {
 
         colorView.backgroundColor = event.color
         nameLabel.text = event.text
+    }
+}
+
+// MARK: -
+
+private extension NSLayoutConstraint {
+
+    // MARK: - Instance Methods
+
+    func withPrority(_ priority: UILayoutPriority) -> Self {
+        self.priority = priority
+
+        return self
     }
 }

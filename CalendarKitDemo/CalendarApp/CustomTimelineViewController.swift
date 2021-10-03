@@ -4,7 +4,11 @@ import CalendarKit
 
 final class CustomTimelineViewController: UIViewController {
 
-    public weak var dataSource: EventDataSource?
+    // MARK: - Instance Properties
+
+    private weak var timelineContainerController: TimelineContainerController<SubjectEventView>?
+
+    // MARK: - Instance Methods
 
     private func setupTimelineController() -> TimelineContainerController<SubjectEventView> {
         let viewController = TimelineContainerController<SubjectEventView>()
@@ -24,6 +28,8 @@ final class CustomTimelineViewController: UIViewController {
 
         return viewController
     }
+
+    // MARK: - UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +59,7 @@ final class CustomTimelineViewController: UIViewController {
         style.leadingInset = 70.0
         style.isNowLineHidden = true
         style.dateStyle = .twentyFourHour
+        style.verticalDiff = 64
 
         timeline.updateStyle(style)
         container.backgroundColor = style.backgroundColor
@@ -68,6 +75,14 @@ final class CustomTimelineViewController: UIViewController {
         let validEvents = events.filter{ $0.datePeriod.overlaps(day) }
 
         timeline.layoutAttributes = validEvents.map(EventLayoutAttributes.init)
+
+        timelineContainerController = timelineController
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        timelineContainerController?.container.scrollToFirstEvent(animated: true)
     }
 }
 
@@ -112,7 +127,7 @@ extension CustomTimelineViewController: EventDataSource {
 
     func eventsForDate(_ date: Date) -> [EventDescriptor] {
         let event = SubjectEventDescriptor(
-            startDate: date.addingTimeInterval(60 * 60 * 16),
+            startDate: date.addingTimeInterval(60 * 60 * 16).addingTimeInterval(60 * 10),
             subjectName: "Английский язык - 11 класс",
             subjectColor: .red
         )
