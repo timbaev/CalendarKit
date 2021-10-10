@@ -1,0 +1,16 @@
+PODS:
+  - CalendarKit (0.12.3)
+
+DEPENDENCIES:
+  - CalendarKit (from `../`)
+
+EXTERNAL SOURCES:
+  CalendarKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  CalendarKit: dd8be320afe76caf73ab02798759423bcbf97bb3
+
+PODFILE CHECKSUM: 4e824bc0e5382971b68789811cd5cb4534a373d3
+
+COCOAPODS: 1.11.2
